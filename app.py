@@ -179,4 +179,39 @@ st.write("")
 chart_data = pd.DataFrame({'Valid': [210, 245, 190, 320, 300, 180, 205], 'Risks': [4, 8, 3, 12, 10, 2, 5]},
                           index=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
 st.area_chart(chart_data, color=["#2DD4BF", "#F43F5E"], height=150)
+with right_col:
+    # --- AUDIT TRAIL (Fixed height scrollable) ---
+    st.markdown('<div class="stCard" style="padding-bottom:5px;">', unsafe_allow_html=True)
+    st.markdown('<p style="font-weight: 700; font-size: 0.85rem; margin:0;">🛡️ IMMUTABLE AUDIT TRAIL</p>',
+                unsafe_allow_html=True)
+    st.markdown('<p style="color: #2DD4BF; font-size: 0.6rem; margin-bottom:5px;">✔ SHA-256 Verified</p>',
+                unsafe_allow_html=True)
+
+    with st.container(height=400):
+        # Enumerate use kar rahe hain taaki har expander की ID unique ho
+        for i, e in enumerate(current_tx.get('events', [])):
+            dot_color = "#3B82F6"
+            if "BLOCKED" in e['type']: dot_color = "#F43F5E"
+            if "SUCCESS" in e['type']: dot_color = "#2DD4BF"
+
+            # Event Info
+            st.markdown(f"""<div style="border-left: 2px solid #1E293B; padding-left: 10px; margin-bottom: 5px; position: relative;">
+                <div style="position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: {dot_color}; border-radius: 50%;"></div>
+                <div class="mono" style="font-size: 0.6rem; color: #475569;">{e['time']} • {e['source']}</div>
+                <div style="font-size: 0.75rem; font-weight: 600;">{e['type']}</div>
+                <div style="font-size: 0.7rem; color: #94A3B8;">{e['msg']}</div>
+            </div>""", unsafe_allow_html=True)
+
+            # --- YAHAN HAI FIX: Asli Expander for Hash ---streamlit run app.py
+            with st.expander(f"View Forensic Hash", expanded=False):
+                # Ek unique hash generate karna demo ke liye
+                fake_hash = f"sha256:e3b0c442{i}9fc1c149afbf4c8996fb92427ae"
+                st.code(json.dumps({
+                    "event_id": f"REQ-88{i}",
+                    "hash": fake_hash,
+                    "integrity": "Verified",
+                    "timestamp": e['time']
+                }, indent=2), language='json')
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
