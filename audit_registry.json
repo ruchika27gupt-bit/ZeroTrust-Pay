@@ -1,0 +1,18 @@
+{
+    "tx_id": "PAY-LX-98234-2024",
+    "state": "PAID",
+    "events": [
+        {
+            "time": "17:46:17",
+            "source": "RAZORPAY_API",
+            "type": "SETTLEMENT_SUCCESS",
+            "msg": "Funds settled via RazorpayX"
+        },
+        {
+            "time": "17:46:13",
+            "source": "SYS",
+            "type": "INITIATED",
+            "msg": "Payment request received"
+        }
+    ]
+}
